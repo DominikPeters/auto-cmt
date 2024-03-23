@@ -9,7 +9,7 @@ Clone the repository, navigate to the project directory, and install the require
 ```bash
 git clone https://github.com/DominikPeters/auto-cmt.git
 cd auto-cmt
-pip install requests rich
+python3 -m pip install requests rich
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ Pull the latest changes from the repository to ensure you have the most up-to-da
 
 ```bash
 git pull
-python fetch.py
+python3 fetch.py
 ```
 
 The script will prompt you for the following information:
