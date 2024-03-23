@@ -36,11 +36,12 @@ def get_paper_ids(conference_id, cookies, is_meta_reviewer):
     models = "MetaReviewModels" if is_meta_reviewer else "ReviewModels"
     data = {"requests": [{"url": f"/api/odata/{conference_id}/{models}?$count=true&$orderby=Id&$top=50","method": "GET","headers": {"Accept": "application/json"}}]}
     response = requests.post(url, headers=headers, cookies=cookies, json=data)
-    paper_ids = [item['Id'] for item in response.json()['responses'][0]['body']['value']]
+    value = response.json()['responses'][0]['body']['value']
+    paper_ids = [item['Id'] for item in value]
     # save response to file
     os.makedirs(f'data/{conference_id}', exist_ok=True)
     with open(f'data/{conference_id}/paper_ids.json', 'w') as file:
-        file.write(json.dumps(paper_ids))
+        file.write(json.dumps(value))
     return paper_ids
 
 def fetch_and_save(conference_id, paper_id, data_type, cookies):

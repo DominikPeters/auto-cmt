@@ -36,21 +36,35 @@ def build_html():
         <h2>Paper Reviews</h2>
     """
 
+    paper_ids = json.load(open('data/IJCAI2024/paper_ids.json'))
+
+    have_added_awaiting_decision_separator = False
+
     # Loop through each subfolder in the IJCAI2024 directory
     for subfolder in os.listdir('data/IJCAI2024'):
         subfolder_path = os.path.join('data/IJCAI2024', subfolder)
+    for paper in sorted(paper_ids, key=lambda x: (int(x["Status"] != "Awaiting Decision"), int(x["Id"]))):
+        subfolder_path = os.path.join('data/IJCAI2024', str(paper["Id"]))
         if os.path.isdir(subfolder_path):
+
+            if paper["Status"] != "Awaiting Decision" and not have_added_awaiting_decision_separator:
+                html_content += "<h2>Already Decided</h2>"
+                have_added_awaiting_decision_separator = True
+
             reviews_file_path = os.path.join(subfolder_path, 'Reviews.json')
             discussion_file_path = os.path.join(subfolder_path, 'DiscussionMessages.json')
 
-            if os.path.isfile(reviews_file_path) and os.path.isfile(discussion_file_path):
+            if os.path.isfile(reviews_file_path):
                 # Load the reviews data from the file
                 with open(reviews_file_path) as f:
                     reviews_data = json.load(f)['value']
 
-                # Load the discussion data from the file
-                with open(discussion_file_path) as f:
-                    discussion_data = json.load(f)['value']
+                if os.path.isfile(discussion_file_path):
+                    # Load the discussion data from the file
+                    with open(discussion_file_path) as f:
+                        discussion_data = json.load(f)['value']
+                else:
+                    discussion_data = []
 
                 number_real_messages = len([message for message in discussion_data if "The discussion is open now" not in message['Text']])
 
@@ -124,3 +138,6 @@ def build_html():
         file.write(html_content)
 
     print(f"HTML output saved to: {output_file_path}")
+
+if __name__ == "__main__":
+    build_html()
