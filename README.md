@@ -2,6 +2,9 @@
 
 This repository contains a Python script for interacting with the CMT (Conference Management Toolkit) system, specifically tailored for the IJCAI 2024 conference. The script allows you to fetch reviews, meta-reviews, discussion messages, and author feedback for the papers you are reviewing or meta-reviewing in the conference.
 
+<img width="600" alt="image" src="https://github.com/DominikPeters/auto-cmt/assets/3543224/d6c615fb-d6e1-4c5b-8eae-ca18f77357a8">
+
+
 ## Installation
 
 Clone the repository, navigate to the project directory, and install the required dependencies to use the script.
