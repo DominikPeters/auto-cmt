@@ -14,12 +14,11 @@ pip install requests rich
 
 ## Usage
 
-Pull the latest changes from the repository to ensure you have the most up-to-date version, then run the `fetch.py` and `html.py` scripts to fetch and display the review information.
+Pull the latest changes from the repository to ensure you have the most up-to-date version, then run the `fetch.py` script to fetch and display the review information.
 
 ```bash
 git pull
 python fetch.py
-python html.py
 ```
 
 The script will prompt you for the following information:

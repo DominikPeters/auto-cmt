@@ -4,6 +4,7 @@ import json
 from rich.prompt import Prompt
 from rich.console import Console
 from pathlib import Path
+from make_html import build_html
 
 def login_to_cmt(conference_id, username, password):
     login_url = 'https://cmt3.research.microsoft.com/api/odata/Users/Login?ReturnUrl=%2F'
@@ -154,3 +155,5 @@ if __name__ == "__main__":
 
     console.print(f"Processing conference {conference_info['conference_id']} as {'meta reviewer' if conference_info['is_meta_reviewer'] else 'reviewer'}...", style="bold green")
     main(conference_info['conference_id'], credentials['username'], credentials['password'], conference_info['is_meta_reviewer'])
+
+    build_html()
