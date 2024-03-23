@@ -38,6 +38,7 @@ def get_paper_ids(conference_id, cookies, is_meta_reviewer):
     response = requests.post(url, headers=headers, cookies=cookies, json=data)
     paper_ids = [item['Id'] for item in response.json()['responses'][0]['body']['value']]
     # save response to file
+    os.makedirs(f'data/{conference_id}', exist_ok=True)
     with open(f'data/{conference_id}/paper_ids.json', 'w') as file:
         file.write(json.dumps(paper_ids))
     return paper_ids
