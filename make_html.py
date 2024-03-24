@@ -78,7 +78,7 @@ def build_html(conference):
                 num_reviews = len(reviews_data)
                 review_scores = [get_score(review) for review in reviews_data]
                 review_scores = " / ".join([str(score) for score in review_scores])
-                paper_summary = f"{paper_number} \"{paper_title}\" - {num_reviews} Reviews - {review_scores} - {'📜 ' * (number_real_messages)}"
+                paper_summary = f"{paper_number} \"{paper_title}\" - {review_scores} - {'📜 ' * (number_real_messages)}"
                 html_content += f"<details>\n<summary>{paper_summary}</summary>\n"
 
                 paper_html = ""
@@ -98,6 +98,8 @@ def build_html(conference):
                         paper_html += f"      <div class='date'>{date} {time}</div>\n"
                         paper_html += f"      <div class='text'>{text}</div>\n"
                         paper_html += "    </div>\n"
+                    # https://cmt3.research.microsoft.com/IJCAI2024/Discussion/Feed/2401
+                    paper_html += f"  <a href='https://cmt3.research.microsoft.com/{conference}/Discussion/Feed/{reviews_data[0]['SubmissionId']}'>Go to discussion</a>\n"
                     paper_html += "  </div>\n"
 
                 # Loop through each review
