@@ -11,7 +11,7 @@ recommendation_scores = {
     'Strong Accept': 8,
 }
 
-def build_html():
+def build_html(conference):
     # Start creating the HTML content
     html_content = """
     <!DOCTYPE html>
@@ -36,15 +36,12 @@ def build_html():
         <h2>Paper Reviews</h2>
     """
 
-    paper_ids = json.load(open('data/IJCAI2024/paper_ids.json'))
+    paper_ids = json.load(open(f'data/{conference}/paper_ids.json'))
 
     have_added_awaiting_decision_separator = False
 
-    # Loop through each subfolder in the IJCAI2024 directory
-    for subfolder in os.listdir('data/IJCAI2024'):
-        subfolder_path = os.path.join('data/IJCAI2024', subfolder)
     for paper in sorted(paper_ids, key=lambda x: (int(x["Status"] != "Awaiting Decision"), int(x["Id"]))):
-        subfolder_path = os.path.join('data/IJCAI2024', str(paper["Id"]))
+        subfolder_path = os.path.join(f'data/{conference}', str(paper["Id"]))
         if os.path.isdir(subfolder_path):
 
             if paper["Status"] != "Awaiting Decision" and not have_added_awaiting_decision_separator:
@@ -98,12 +95,16 @@ def build_html():
 
                 # Loop through each review
                 for review in reviews_data:
-                    # We take the first sentence of question "7" as the summary for each review
-                    reviewer_summary = review['Questions'][6]['Answers'][0]['Text'].split('.')[0]
-                    confidence = review['Questions'][8]['Answers'][0]['Text'].split('.')[0]
-                    knowledge = review['Questions'][9]['Answers'][0]['Text'].split(':')[0]
-                    reviewer_summary += f" <span style='font-weight: normal'>/ {confidence} / {knowledge}</span>"
-                    reviewer_details = f"R{review['ReviewerNumber']}: {reviewer_summary}"
+                    if not 'Questions' in review or not 'ReviewerNumber' in review:
+                        continue
+                    if len(review['Questions']) < 10:
+                        reviewer_details = f"R{review['ReviewerNumber']}"
+                    else:
+                        reviewer_summary = review['Questions'][6]['Answers'][0]['Text'].split('.')[0]
+                        confidence = review['Questions'][8]['Answers'][0]['Text'].split('.')[0]
+                        knowledge = review['Questions'][9]['Answers'][0]['Text'].split(':')[0]
+                        reviewer_summary += f" <span style='font-weight: normal'>/ {confidence} / {knowledge}</span>"
+                        reviewer_details = f"R{review['ReviewerNumber']}: {reviewer_summary}"
                     paper_html += f"  <details>\n  <summary>{reviewer_details}</summary>\n  <ul>\n"
                     
                     # Loop through each question-answer pair for the current review
@@ -140,4 +141,11 @@ def build_html():
     print(f"HTML output saved to: {output_file_path}")
 
 if __name__ == "__main__":
-    build_html()
+    if os.path.exists('last_conference.json'):
+        with(open('last_conference.json')) as f:
+            conference_file = json.load(f)
+            conference = conference_file['conference_id']
+    else:
+        conference = input("Enter the conference ID: ")
+    build_html(conference)
+    

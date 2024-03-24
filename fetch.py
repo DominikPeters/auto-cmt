@@ -152,10 +152,12 @@ def get_conference_info():
     return conference_info
 
 if __name__ == "__main__":
+    console.print("Auto-CMT", style="bold green")
+
     credentials = get_credentials()
     conference_info = get_conference_info()
 
     console.print(f"Processing conference {conference_info['conference_id']} as {'meta reviewer' if conference_info['is_meta_reviewer'] else 'reviewer'}...", style="bold green")
     main(conference_info['conference_id'], credentials['username'], credentials['password'], conference_info['is_meta_reviewer'])
 
-    build_html()
+    build_html(conference_info['conference_id'])
