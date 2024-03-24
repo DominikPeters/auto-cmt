@@ -34,7 +34,7 @@ def build_html(conference):
             ul { margin-top: 5px; padding-left: 15px; }
             li { margin-bottom: 5px; }
             .discussion { background-color: #f0f0f0; padding: 10px; margin-top: 10px; }
-            .message { margin-bottom: 10px; }
+            .message { margin-top: 10px; }
             .author { font-weight: bold; }
             .date { font-size: 0.8em; color: #666; }
         </style>
@@ -83,9 +83,16 @@ def build_html(conference):
 
                 paper_html = ""
 
+                # Link to author feedback if PDF exists
+                author_feedback_link = ""
+                author_feedback_pdf_path = os.path.join(subfolder_path, 'AuthorFeedback.pdf')
+                if os.path.isfile(author_feedback_pdf_path):
+                    author_feedback_link = f" &middot; <a href='{author_feedback_pdf_path}' target='_blank'>Author Feedback</a>"
+
                 # Add discussion messages
                 if discussion_data:
                     paper_html += "  <div class='discussion'>\n"
+                    paper_html += f"  <a href='https://cmt3.research.microsoft.com/{conference}/Discussion/Feed/{reviews_data[0]['SubmissionId']}'>Go to discussion</a>{author_feedback_link}\n"
                     for message in discussion_data:
                         author = message['FirstName'] if message['FirstName'] else message['Role']
                         date = message['Date'].split('T')[0]
@@ -99,7 +106,6 @@ def build_html(conference):
                         paper_html += f"      <div class='text'>{text}</div>\n"
                         paper_html += "    </div>\n"
                     # https://cmt3.research.microsoft.com/IJCAI2024/Discussion/Feed/2401
-                    paper_html += f"  <a href='https://cmt3.research.microsoft.com/{conference}/Discussion/Feed/{reviews_data[0]['SubmissionId']}'>Go to discussion</a>\n"
                     paper_html += "  </div>\n"
 
                 # Loop through each review

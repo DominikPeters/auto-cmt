@@ -86,7 +86,7 @@ def fetch_and_save(conference_id, paper_id, data_type, cookies):
                         with open(pdf_path, 'wb') as pdf_file:
                             pdf_file.write(file_response.content)
     else:
-        print(f"Failed to fetch {data_type} for paper {paper_id}")
+        print(f"        Failed to fetch {data_type} for paper {paper_id}")
 
 def main(conference_id, username, password, is_meta_reviewer):
     print("Logging in...")
@@ -95,13 +95,13 @@ def main(conference_id, username, password, is_meta_reviewer):
     paper_ids = get_paper_ids(conference_id, cookies, is_meta_reviewer)
     for num, paper_id in enumerate(paper_ids):
         print(f"{num+1}/{len(paper_ids)} Fetching paper {paper_id}...")
-        print("   Reviews")
+        print("      Reviews")
         fetch_and_save(conference_id, paper_id, 'Reviews', cookies)
-        print("   MetaReviews")
+        print("      MetaReviews")
         fetch_and_save(conference_id, paper_id, 'MetaReviews', cookies)
-        print("   DiscussionMessages")
+        print("      DiscussionMessages")
         fetch_and_save(conference_id, paper_id, 'DiscussionMessages', cookies)
-        print("   AuthorFeedback")
+        print("      AuthorFeedback")
         fetch_and_save(conference_id, paper_id, 'AuthorFeedback', cookies)
 
 console = Console()
