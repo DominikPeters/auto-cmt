@@ -11,6 +11,13 @@ recommendation_scores = {
     'Strong Accept': 8,
 }
 
+def get_score(review):
+    try:
+        return recommendation_scores[review['Questions'][6]['Answers'][0]['Text'].split('.')[0]]
+    except:
+        return None
+
+
 def build_html(conference):
     # Start creating the HTML content
     html_content = """
@@ -69,7 +76,7 @@ def build_html(conference):
                 paper_title = reviews_data[0]['SubmissionTitle']
                 paper_number = f"<span style='font-weight: normal'>{reviews_data[0]['SubmissionId']}</span>"
                 num_reviews = len(reviews_data)
-                review_scores = [recommendation_scores[review['Questions'][6]['Answers'][0]['Text'].split('.')[0]] for review in reviews_data]
+                review_scores = [get_score(review) for review in reviews_data]
                 review_scores = " / ".join([str(score) for score in review_scores])
                 paper_summary = f"{paper_number} \"{paper_title}\" - {num_reviews} Reviews - {review_scores} - {'📜 ' * (number_real_messages)}"
                 html_content += f"<details>\n<summary>{paper_summary}</summary>\n"
